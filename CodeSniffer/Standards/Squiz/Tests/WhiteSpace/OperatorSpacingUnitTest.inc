@@ -110,15 +110,6 @@ $z = $test ?: false;
 
 $closureWithDefaultParamter = function (array $testArray=array()) {};
 
-function closureFunction($func) {
-    $func();
-}
-closureFunction(function () {
-    $x = $test ? -1 : 1;
-    $y = $test ? 1 : -1;
-    $z = $test ?: false;
-});
-
 switch ($foo) {
 	case -1:
 		break;
@@ -136,4 +127,14 @@ $y = -10 + 2;
 
 $a = $x?$y:$z;
 $a = $x ? $y : $z;
+
+function closureFunction($func) {
+    $func();
+}
+closureFunction(function () {
+    $x = $test ? -1 : 1;
+    $y = $test ? 1 : -1;
+    $z = $test ?: false;
+});
+
 ?>
