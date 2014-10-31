@@ -132,9 +132,11 @@ function closureFunction($func) {
     $func();
 }
 closureFunction(function () {
-    $x = $test ? -1 : 1;
-    $y = $test ? 1 : -1;
-    $z = $test ?: false;
+    if (!isset($test)) {
+    	$x = $test ? -1 : 1;
+    	$y = $test ? 1 : -1;
+    	$z = $test ?: false;
+    }
 });
 
 ?>
