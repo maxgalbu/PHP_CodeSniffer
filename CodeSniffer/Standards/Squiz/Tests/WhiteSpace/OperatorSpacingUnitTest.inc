@@ -128,14 +128,13 @@ $y = -10 + 2;
 $a = $x?$y:$z;
 $a = $x ? $y : $z;
 
-function closureFunction($func) {
-    $func();
-}
-closureFunction(function () {
+$di->set('config', function() {
     if (!isset($test)) {
     	$x = $test ? -1 : 1;
     	$y = $test ? 1 : -1;
     	$z = $test ?: false;
+    	
+    	$configvars['PROTOCOL'] = $_SERVER['HTTPS'] === "on" ? "https" : "http";
     }
 });
 
