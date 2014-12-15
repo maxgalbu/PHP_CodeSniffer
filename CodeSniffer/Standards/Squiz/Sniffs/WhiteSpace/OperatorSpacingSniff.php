@@ -40,6 +40,13 @@ class Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sn
                                    'JS',
                                   );
 
+    /**
+     * Whether to consider newlines as whitespace
+     *
+     * @var boolean
+     */
+    public $newlineAsWhitespace = false;
+
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -252,7 +259,12 @@ class Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sn
             }
         }//end if
 
-        if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
+        $isNotWhitespaceAfter = $tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE;
+        if ($this->newlineAsWhitespace === true) {
+            $isNotWhitespaceAfter = $isNotWhitespaceAfter || $tokens[($stackPtr + 2)]['line'] !== $tokens[$stackPtr]['line'];
+        }
+
+        if ($isNotWhitespaceAfter === true) {
             $error = "Expected 1 space after \"$operator\"; 0 found";
             $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NoSpaceAfter');
             if ($fix === true) {
@@ -261,7 +273,7 @@ class Squiz_Sniffs_WhiteSpace_OperatorSpacingSniff implements PHP_CodeSniffer_Sn
 
             $phpcsFile->recordMetric($stackPtr, 'Space after operator', 0);
         } else {
-            if ($tokens[($stackPtr + 2)]['line'] !== $tokens[$stackPtr]['line']) {
+            if ($tokens[($stackPtr + 2)]['line'] !== $tokens[$stackPtr]['line'] && $this->newlineAsWhitespace === false) {
                 $found = 'newline';
             } else {
                 $found = $tokens[($stackPtr + 1)]['length'];
